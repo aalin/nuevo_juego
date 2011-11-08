@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "game.hpp"
 #include "opengl.hpp"
 
 Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
@@ -13,11 +14,14 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	if(_surface == 0)
 		throw "Surface could not be created";
 
+	_game = new Game();
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_FLAT);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
@@ -44,13 +48,13 @@ void Engine::handleInput()
 						quit();
 						break;
 					default:
-						_scene.keyDown(event.key.keysym.sym);
+						_game->keyDown(event.key.keysym.sym);
 						break;
 				}
 			}
 			else if(event.type == SDL_KEYUP)
 			{
-				_scene.keyUp(event.key.keysym.sym);
+				_game->keyUp(event.key.keysym.sym);
 			}
 		}
 	}
@@ -58,13 +62,13 @@ void Engine::handleInput()
 
 void Engine::update()
 {
-	_scene.update();
+	_game->update();
 }
 
 void Engine::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_scene.draw();
+	_game->draw();
 	_frame_counter.update();
 	SDL_GL_SwapBuffers();
 }

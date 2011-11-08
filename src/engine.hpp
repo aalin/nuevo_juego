@@ -4,13 +4,7 @@
 #include <SDL/SDL.h>
 #include "frame_counter.hpp"
 
-class Scene {
-	public:
-		void keyDown(SDLKey&) {}
-		void keyUp(SDLKey&) {}
-		void update() {}
-		void draw() {}
-};
+class Game;
 
 class Engine {
 	public:
@@ -26,7 +20,7 @@ class Engine {
 
 	protected:
 		FrameCounter _frame_counter;
-		Scene _scene;
+		Game* _game;
 		bool _running;
 		SDL_Surface* _surface;
 };

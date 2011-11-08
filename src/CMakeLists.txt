@@ -12,6 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -Wall -Wextra")
 
 set(SHARED_SOURCES
 	engine
+	game
+	map
 )
 
 set(MAIN_SOURCES main ${SHARED_SOURCES})
