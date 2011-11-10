@@ -11,6 +11,8 @@ class Map {
 
 		void draw();
 
+		unsigned int size() const { return _size; };
+
 	private:
 		const unsigned int _size;
 		std::vector<float> _height_data;

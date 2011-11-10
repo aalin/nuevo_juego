@@ -14,6 +14,7 @@ set(SHARED_SOURCES
 	engine
 	game
 	map
+	vector3
 )
 
 set(MAIN_SOURCES main ${SHARED_SOURCES})
