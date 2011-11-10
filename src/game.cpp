@@ -3,6 +3,9 @@
 
 #include "opengl.hpp"
 
+#include <SDL/SDL.h>
+#include <cmath>
+
 Game::Game() {
 	_map = new Map();
 }
@@ -25,9 +28,15 @@ void Game::draw()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	float ticks = SDL_GetTicks();
+	float x = std::cos(ticks / 800.0);
+	float y = std::sin(ticks / 800.0);
+
+	const float center = _map->size() / 2.0;
+
 	gluLookAt(
-		-20.0, -20.0, 10.0,
-		50.0, 50.0, 0.0,
+		x * 100.0 + center, y * 100.0 + center, 30.0,
+		x * 20.0 + center, y * 20.0 + center, 0.0,
 		0.0, 0.0, 1.0
 	);
 	_map->draw();
