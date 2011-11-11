@@ -15,6 +15,7 @@ set(SHARED_SOURCES
 	game
 	map
 	vector3
+	shader
 )
 
 set(MAIN_SOURCES main ${SHARED_SOURCES})

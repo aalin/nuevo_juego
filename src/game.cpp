@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "map.hpp"
+#include "shader.hpp"
 
 #include "opengl.hpp"
 
@@ -8,11 +9,13 @@
 
 Game::Game() {
 	_map = new Map();
+	_shader = new Shader("test");
 }
 
 Game::~Game()
 {
 	delete _map;
+	delete _shader;
 }
 
 void Game::update()
@@ -39,5 +42,7 @@ void Game::draw()
 		x * 20.0 + center, y * 20.0 + center, 0.0,
 		0.0, 0.0, 1.0
 	);
+
+	_shader->use();
 	_map->draw();
 }
