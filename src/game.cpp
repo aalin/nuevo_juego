@@ -34,6 +34,9 @@ void Game::draw()
 
 	const float center = _map->size() / 2.0;
 
+	GLfloat light_pos[] = {x * 20.0 + center, y * 20.0 + center, 30.0, 1.0};
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
 	gluLookAt(
 		x * 100.0 + center, y * 100.0 + center, 30.0,
 		x * 20.0 + center, y * 20.0 + center, 0.0,

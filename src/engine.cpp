@@ -21,9 +21,30 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_FLAT);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	glEnable(GL_FOG);
+	GLfloat fog_color[] = {0.0, 0.0, 0.0, 0.5};
+	glFogfv(GL_FOG_COLOR, fog_color);
+	glFogi(GL_FOG_MODE, GL_LINEAR);
+	glFogf(GL_FOG_DENSITY, 0.05);
+	glHint(GL_FOG_HINT, GL_NICEST);
+	glFogf(GL_FOG_START, 50.0);
+	glFogf(GL_FOG_END, 128.0);
+
+	GLfloat light_pos[] = {-2.0, 2.0, 2.0, 1.0};
+	GLfloat light_ka[] = {0.5, 0.5, 0.5, 1.0};
+	GLfloat light_kd[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat light_ks[] = {1.0, 1.0, 1.0, 1.0};
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ka);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_kd);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_ks);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 }
 
 Engine::~Engine()
