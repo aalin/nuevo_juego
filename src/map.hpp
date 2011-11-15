@@ -14,7 +14,7 @@ class Map {
 		unsigned int size() const { return _size; };
 
 	private:
-		const unsigned int _size;
+		unsigned int _size;
 		std::vector<float> _height_data;
 
 		GLuint _buffers[2];

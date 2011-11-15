@@ -32,7 +32,7 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	glFogf(GL_FOG_DENSITY, 0.05);
 	glHint(GL_FOG_HINT, GL_NICEST);
 	glFogf(GL_FOG_START, 50.0);
-	glFogf(GL_FOG_END, 128.0);
+	glFogf(GL_FOG_END, 512.0);
 
 	GLfloat light_pos[] = {-2.0, 2.0, 2.0, 1.0};
 	GLfloat light_ka[] = {0.5, 0.5, 0.5, 1.0};

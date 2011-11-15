@@ -3,19 +3,41 @@
 #include "vector3.hpp"
 #include <cmath>
 #include <iostream>
+#include <fstream>
 
 const float PI = 3.14159;
 
-Map::Map() : _size(128)
+std::vector<float> loadMap(std::string filename) {
+	std::ifstream is(filename.c_str());
+
+	if(is.fail())
+		throw "error loading file";
+
+	is.seekg(0, std::ios::end);
+	unsigned int length = is.tellg();
+	is.seekg(0, std::ios::beg);
+
+	std::vector<float> result;
+	result.reserve(length);
+
+	while(is.good())
+	{
+		unsigned char c = is.get();
+		if(is.good())
+			result.push_back(c / 256.0 * 50.0 - 30.0);
+	}
+
+	is.close();
+	return result;
+};
+
+Map::Map()
 {
 	std::cout << "Map::Map()" << std::endl;
 	glGenBuffers(2, _buffers);
 
-	_height_data.reserve(_size * _size);
-
-	for(unsigned int y = 0; y < _size; ++y)
-		for(unsigned int x = 0; x < _size; ++x)
-			_height_data.push_back(std::cos(x / PI) + std::sin(y / PI) + std::cos(x * y / 200.0));
+	_height_data = loadMap("map.a");
+	_size = std::sqrt(_height_data.size());
 
 	std::vector<float> data;
 	data.reserve(_size * _size * 6);

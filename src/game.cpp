@@ -38,7 +38,7 @@ void Game::draw()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 
 	gluLookAt(
-		x * 100.0 + center, y * 100.0 + center, 30.0,
+		x * 200 + center, y * 200 + center, 50.0,
 		x * 20.0 + center, y * 20.0 + center, 0.0,
 		0.0, 0.0, 1.0
 	);
