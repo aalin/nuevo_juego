@@ -1,9 +1,10 @@
 #include "map.hpp"
 #include "opengl.hpp"
-#include "vector3.hpp"
 #include <cmath>
 #include <iostream>
 #include <fstream>
+
+#include "p-math/vector.h"
 
 const float PI = 3.14159;
 
@@ -39,62 +40,47 @@ Map::Map()
 	_height_data = loadMap("map.a");
 	_size = std::sqrt(_height_data.size());
 
-	std::vector<float> data;
-	data.reserve(_size * _size * 6);
+	std::vector<p::vec3> data;
+	data.reserve(_size * _size * 2);
 
 	for(unsigned int y = 0; y < _size; ++y)
 	{
 		for(unsigned int x = 0; x < _size; ++x)
 		{
 			// Vertex
-			data.push_back(x);
-			data.push_back(y);
-			data.push_back(_height_data[y * _size + x]);
+			data.push_back(p::vec3(x, y, _height_data[y * _size + x]));
 
 			// Normal
 			if(x < 1 || y < 1 || x >= _size || y >= _size)
-			{
-				data.push_back(0.0);
-				data.push_back(0.0);
-				data.push_back(0.0);
-			}
+				data.push_back(p::vec3(0.0, 0.0, 0.0));
 			else
 			{
 				float dx = _height_data[y * _size + x + 1] - _height_data[y * _size + x - 1];
 				float dy = _height_data[(y + 1) * _size + x] - _height_data[(y - 1) * _size + x];
-				Vector3 v(-dx, -dy, 1.0);
-				v.normalize();
-				data.push_back(v.x);
-				data.push_back(v.y);
-				data.push_back(v.z);
+				p::vec3 v(-dx, -dy, 1.0);
+				data.push_back(p::normalize(v));
 			}
 		}
 	}
 
-	std::cout << data.size() << std::endl;
-
-	std::vector<unsigned short> indexes;
-	indexes.reserve(_size * _size * 6);
+	typedef p::vec<unsigned short, 3> index;
+	std::vector<index> indexes;
+	indexes.reserve(_size * _size * 2);
 
 	for(unsigned int y = 0; y < _size - 1; ++y)
 	{
 		for(unsigned int x = 0; x < _size - 1; ++x)
 		{
-			indexes.push_back(y * _size + x);
-			indexes.push_back(y * _size + x + 1);
-			indexes.push_back((y + 1) * _size + x + 1);
-
-			indexes.push_back(y * _size + x);
-			indexes.push_back((y + 1) * _size + x);
-			indexes.push_back((y + 1) * _size + x + 1);
+			indexes.push_back(index(y * _size + x, y * _size + x + 1, (y + 1) * _size + x + 1));
+			indexes.push_back(index(y * _size + x, (y + 1) * _size + x, (y + 1) * _size + x + 1));
 		}
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer());
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.size(), &data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * data.size(), &data[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer());
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indexes.size(), &indexes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * 3 * indexes.size(), &indexes[0], GL_STATIC_DRAW);
 }
 
 Map::~Map()

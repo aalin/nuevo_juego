@@ -1,0 +1,3 @@
+[submodule "src/p-math"]
+	path = src/p-math
+	url = https://github.com/peteb/p-math.git
