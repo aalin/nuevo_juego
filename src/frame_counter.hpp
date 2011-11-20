@@ -16,7 +16,7 @@ class FrameCounter
 		void update()
 		{
 			_frames++;
-			int end_time = SDL_GetTicks();
+			unsigned int end_time = SDL_GetTicks();
 			if(end_time - _start_time >= 5000)
 			{
 				float seconds = (end_time - _start_time) / 1000.0;
@@ -28,8 +28,8 @@ class FrameCounter
 		}
 
 	protected:
-		int _start_time;
-		int _frames;
+		unsigned int _start_time;
+		unsigned int _frames;
 };
 
 #endif
