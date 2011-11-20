@@ -15,6 +15,7 @@ Math from https://github.com/peteb/p-math
 To initialize:
 
     git submodule init
+    git submodule update
 
 # Building
 

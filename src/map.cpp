@@ -32,6 +32,9 @@ std::vector<float> loadMap(std::string filename) {
 	return result;
 };
 
+template <typename T>
+T square(T value) { return value * value; }
+
 Map::Map()
 {
 	std::cout << "Map::Map()" << std::endl;
@@ -41,7 +44,7 @@ Map::Map()
 	_size = std::sqrt(_height_data.size());
 
 	std::vector<p::vec3> data;
-	data.reserve(_size * _size * 2);
+	data.reserve(square(_size) * 2);
 
 	for(unsigned int y = 0; y < _size; ++y)
 	{
@@ -65,14 +68,14 @@ Map::Map()
 
 	typedef p::vec<unsigned short, 3> index;
 	std::vector<index> indexes;
-	indexes.reserve(_size * _size * 2);
+	indexes.reserve(square(_size - 1) * 2);
 
 	for(unsigned int y = 0; y < _size - 1; ++y)
 	{
 		for(unsigned int x = 0; x < _size - 1; ++x)
 		{
-			indexes.push_back(index(y * _size + x, y * _size + x + 1, (y + 1) * _size + x + 1));
-			indexes.push_back(index(y * _size + x, (y + 1) * _size + x, (y + 1) * _size + x + 1));
+			indexes.push_back(index(y * _size + x, (y * 1) * _size + x + 1, (y + 1) * _size + x + 1));
+			indexes.push_back(index(y * _size + x, (y + 1) * _size + x * 1, (y + 1) * _size + x + 1));
 		}
 	}
 
@@ -80,7 +83,7 @@ Map::Map()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * data.size(), &data[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer());
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * 3 * indexes.size(), &indexes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index) * indexes.size(), &indexes[0], GL_STATIC_DRAW);
 }
 
 Map::~Map()
@@ -98,7 +101,7 @@ void Map::draw() {
 	glVertexPointer(3, GL_FLOAT, vertex_size, (void*)0);
 	glNormalPointer(GL_FLOAT, vertex_size, (void*)(sizeof(float) * 3));
 
-	glDrawElements(GL_TRIANGLES, _size * _size * 6, GL_UNSIGNED_SHORT, (void*)0);
+	glDrawElements(GL_TRIANGLES, square(_size - 1) * 6, GL_UNSIGNED_SHORT, (void*)0);
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
