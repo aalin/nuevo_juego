@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "map.hpp"
+#include "player.hpp"
 
 #include "opengl.hpp"
 
@@ -8,15 +9,18 @@
 
 Game::Game() {
 	_map = new Map();
+	_player = new Player(p::vec2(150.0, 150.0));
 }
 
 Game::~Game()
 {
 	delete _map;
+	delete _player;
 }
 
 void Game::update()
 {
+	_player->update(*_map);
 }
 
 void Game::draw()
@@ -37,10 +41,14 @@ void Game::draw()
 	GLfloat light_pos[] = {x * 20.0 + center, y * 20.0 + center, 30.0, 1.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 
+	p::vec3 look_at = _player->position();
+
 	gluLookAt(
 		x * 200 + center, y * 200 + center, 50.0,
-		x * 20.0 + center, y * 20.0 + center, 0.0,
+		look_at.x, look_at.y, look_at.z,
 		0.0, 0.0, 1.0
 	);
+
 	_map->draw();
+	_player->draw();
 }

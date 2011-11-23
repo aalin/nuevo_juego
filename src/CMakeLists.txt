@@ -14,6 +14,7 @@ set(SHARED_SOURCES
 	engine
 	game
 	map
+	player
 )
 
 set(MAIN_SOURCES main ${SHARED_SOURCES})
@@ -21,10 +22,6 @@ if(APPLE)
 	set(MAIN_SOURCES ${MAIN_SOURCES} sdl/SDLMain.m)
 endif(APPLE)
 
-set(TEST_SOURCES test ${SHARED_SOURCES})
-
 add_executable(nuevo_juego ${MAIN_SOURCES})
-add_executable(test ${TEST_SOURCES})
 set(SHARED_LIBRARIES ${SDL_LIBRARY} ${SDL} ${OPENGL_LIBRARIES})
 target_link_libraries(nuevo_juego ${SHARED_LIBRARIES})
-target_link_libraries(test ${SHARED_LIBRARIES})

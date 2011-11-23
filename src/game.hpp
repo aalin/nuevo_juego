@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 
 class Map;
+class Player;
 
 class Game {
 	public:
@@ -17,6 +18,7 @@ class Game {
 
 	private:
 		Map* _map;
+		Player* _player;
 };
 
 #endif
