@@ -12,6 +12,7 @@ class Map {
 		void draw();
 
 		unsigned int size() const { return _size; };
+
 		float heightAt(unsigned int x, unsigned int y) const {
 			return _height_data[y * _size + x];
 		}

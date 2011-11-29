@@ -10,6 +10,10 @@
 Game::Game() {
 	_map = new Map();
 	_player = new Player(p::vec2(150.0, 150.0));
+
+	_movement.x = 0.0;
+	_movement.y = 0.0;
+	_last_update = SDL_GetTicks();
 }
 
 Game::~Game()
@@ -18,9 +22,55 @@ Game::~Game()
 	delete _player;
 }
 
+void Game::keyUp(SDLKey& key)
+{
+	switch(key)
+	{
+		case SDLK_w:
+			_movement.x -= 1.0;
+			break;
+		case SDLK_s:
+			_movement.x += 1.0;
+			break;
+		case SDLK_a:
+			_movement.y -= 1.0;
+			break;
+		case SDLK_d:
+			_movement.y += 1.0;
+			break;
+		default:
+			break;
+	}
+}
+
+void Game::keyDown(SDLKey& key)
+{
+	switch(key)
+	{
+		case SDLK_w:
+			_movement.x += 1.0;
+			break;
+		case SDLK_s:
+			_movement.x -= 1.0;
+			break;
+		case SDLK_a:
+			_movement.y += 1.0;
+			break;
+		case SDLK_d:
+			_movement.y -= 1.0;
+			break;
+		default:
+			break;
+	}
+}
+
 void Game::update()
 {
+	float speed = (SDL_GetTicks() - _last_update) / 10.0;
+	_player->move(_movement.x * speed);
+	_player->rotate(_movement.y * speed);
 	_player->update(*_map);
+	_last_update = SDL_GetTicks();
 }
 
 void Game::draw()
@@ -33,18 +83,18 @@ void Game::draw()
 	glLoadIdentity();
 
 	float ticks = SDL_GetTicks();
-	float x = std::cos(ticks / 800.0);
-	float y = std::sin(ticks / 800.0);
 
 	const float center = _map->size() / 2.0;
 
-	GLfloat light_pos[] = {x * 20.0 + center, y * 20.0 + center, 30.0, 1.0};
+	p::vec3 look_at = _player->position();
+	p::vec3 camera = look_at + _player->direction() * -25.0;
+	camera.z = _map->heightAt(camera.x, camera.y) + 5.0;
+
+	GLfloat light_pos[] = { camera.x, camera.y, camera.z };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 
-	p::vec3 look_at = _player->position();
-
 	gluLookAt(
-		x * 200 + center, y * 200 + center, 50.0,
+		camera.x, camera.y, camera.z,
 		look_at.x, look_at.y, look_at.z,
 		0.0, 0.0, 1.0
 	);

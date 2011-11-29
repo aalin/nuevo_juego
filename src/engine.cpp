@@ -35,7 +35,7 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	glFogf(GL_FOG_END, 512.0);
 
 	GLfloat light_pos[] = {-2.0, 2.0, 2.0, 1.0};
-	GLfloat light_ka[] = {0.5, 0.5, 0.5, 1.0};
+	GLfloat light_ka[] = {0.8, 0.8, 0.8, 1.0};
 	GLfloat light_kd[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat light_ks[] = {1.0, 1.0, 1.0, 1.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
