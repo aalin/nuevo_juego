@@ -25,7 +25,7 @@ std::vector<float> loadMap(std::string filename) {
 	{
 		unsigned char c = is.get();
 		if(is.good())
-			result.push_back(c / 256.0 * 50.0 - 30.0);
+			result.push_back(c / 256.0 * 50.0);
 	}
 
 	is.close();

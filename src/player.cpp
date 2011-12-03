@@ -23,7 +23,7 @@ Player::~Player()
 
 void Player::update(const Map& map)
 {
-	_position.z = map.heightAt(_position.x, _position.y) + 0.1;
+	_position.z = map.interpolatedHeightAt(_position.x, _position.y) + 0.1;
 }
 
 void Player::draw()

@@ -66,9 +66,9 @@ void Game::keyDown(SDLKey& key)
 
 void Game::update()
 {
-	float speed = (SDL_GetTicks() - _last_update) / 10.0;
+	float speed = (SDL_GetTicks() - _last_update) / 100.0;
 	_player->move(_movement.x * speed);
-	_player->rotate(_movement.y * speed);
+	_player->rotate(_movement.y * speed * 5.0);
 	_player->update(*_map);
 	_last_update = SDL_GetTicks();
 }
@@ -82,13 +82,11 @@ void Game::draw()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	float ticks = SDL_GetTicks();
-
-	const float center = _map->size() / 2.0;
-
 	p::vec3 look_at = _player->position();
-	p::vec3 camera = look_at + _player->direction() * -25.0;
-	camera.z = _map->heightAt(camera.x, camera.y) + 5.0;
+
+	const float camera_distance = 15.0;
+	p::vec3 camera = look_at + _player->direction() * -camera_distance;
+	camera.z = _map->interpolatedHeightAt(camera.x, camera.y) + 5.0;
 
 	GLfloat light_pos[] = { camera.x, camera.y, camera.z };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
