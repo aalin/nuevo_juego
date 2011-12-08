@@ -74,8 +74,12 @@ Map::Map()
 	{
 		for(unsigned int x = 0; x < _size - 1; ++x)
 		{
-			indexes.push_back(index(y * _size + x, (y * 1) * _size + x + 1, (y + 1) * _size + x + 1));
-			indexes.push_back(index(y * _size + x, (y + 1) * _size + x * 1, (y + 1) * _size + x + 1));
+			unsigned short i00 = y * _size + x;
+			unsigned short i10 = y * _size + x + 1;
+			unsigned short i11 = (y + 1) * _size + x + 1;
+			unsigned short i01 = (y + 1) * _size + x;
+			indexes.push_back(index(i00, i10, i11));
+			indexes.push_back(index(i00, i11, i01));
 		}
 	}
 
