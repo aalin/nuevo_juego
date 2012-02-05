@@ -2,6 +2,13 @@
 #include "game.hpp"
 #include "opengl.hpp"
 
+#define SET_LIGHT(LIGHT, PNAME, X, Y, Z, A) \
+{ GLfloat param[] = { X, Y, Z, A }; glLightfv(LIGHT, PNAME, param); }
+
+#define SET_MATERIAL(FACE, PNAME, ...) \
+{ GLfloat param[] = { __VA_ARGS__ } ; glMaterialfv(FACE, PNAME, param); }
+
+
 Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	: _running(true)
 {
@@ -21,6 +28,7 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_FLAT);
+	// glShadeModel(GL_SMOOTH);
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnable(GL_CULL_FACE);
 
@@ -35,15 +43,19 @@ Engine::Engine(unsigned int width, unsigned int height, bool fullscreen)
 	glFogf(GL_FOG_START, 50.0);
 	glFogf(GL_FOG_END, 512.0);
 
-	GLfloat light_pos[] = {-2.0, 2.0, 2.0, 1.0};
-	GLfloat light_ka[] = {0.8, 0.8, 0.8, 1.0};
-	GLfloat light_kd[] = {1.0, 1.0, 1.0, 1.0};
-	GLfloat light_ks[] = {1.0, 1.0, 1.0, 1.0};
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ka);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_kd);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_ks);
+	SET_LIGHT(GL_LIGHT0, GL_POSITION, -2.0, 2.0, 2.0, 1.0);
+	SET_LIGHT(GL_LIGHT0, GL_AMBIENT,   0.0, 0.0, 0.0, 0.0);
+	SET_LIGHT(GL_LIGHT0, GL_DIFFUSE,   0.1, 0.1, 0.1, 0.0);
+	SET_LIGHT(GL_LIGHT0, GL_SPECULAR,  0.0, 0.0, 0.0, 0.0);
 
+	SET_MATERIAL(GL_FRONT, GL_AMBIENT,  0.0, 0.0, 0.0, 0.0);
+	SET_MATERIAL(GL_FRONT, GL_DIFFUSE,  1.0, 1.0, 1.0, 1.0);
+	SET_MATERIAL(GL_FRONT, GL_SPECULAR, 0.0, 0.0, 0.0, 0.0);
+	SET_MATERIAL(GL_FRONT, GL_EMISSION, 0.3, 0.3, 0.3, 0.2);
+	SET_MATERIAL(GL_FRONT, GL_SHININESS, 0);
+
+	glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 }

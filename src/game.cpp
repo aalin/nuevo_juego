@@ -86,7 +86,7 @@ void Game::draw()
 
 	const float camera_distance = 15.0;
 	p::vec3 camera = look_at + _player->direction() * -camera_distance;
-	camera.z = _map->interpolatedHeightAt(camera.x, camera.y) + 5.0;
+	camera.z = _map->interpolatedHeightAt(camera.x, camera.y) + 2.0;
 
 	GLfloat light_pos[] = { camera.x, camera.y, camera.z };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);

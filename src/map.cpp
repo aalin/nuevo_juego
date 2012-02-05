@@ -44,7 +44,7 @@ Map::Map()
 	_size = std::sqrt(_height_data.size());
 
 	std::vector<p::vec3> data;
-	data.reserve(square(_size) * 2);
+	data.reserve(square(_size) * 3);
 
 	for(unsigned int y = 0; y < _size; ++y)
 	{
@@ -63,6 +63,12 @@ Map::Map()
 				p::vec3 v(-dx, -dy, 1.0);
 				data.push_back(p::normalize(v));
 			}
+
+			// Color
+			float r = square(std::cos(x / 180.0));
+			float g = square(std::sin(x / 180.0));
+			float b = square(std::sin(y / 180.0));
+			data.push_back(p::vec3(r, g, b));
 		}
 	}
 
@@ -101,12 +107,16 @@ void Map::draw() {
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	const int vertex_size = sizeof(float) * 6; // 3 floats for vertex, 3 floats for normal
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	const int vertex_size = sizeof(float) * 9; // 3 floats for vertex, 3 floats for normal, 3 floats for color
 	glVertexPointer(3, GL_FLOAT, vertex_size, (void*)0);
 	glNormalPointer(GL_FLOAT, vertex_size, (void*)(sizeof(float) * 3));
+	glColorPointer(3, GL_FLOAT, vertex_size, (void*)(sizeof(float) * 6));
 
 	glDrawElements(GL_TRIANGLES, square(_size - 1) * 6, GL_UNSIGNED_SHORT, (void*)0);
 
+	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
